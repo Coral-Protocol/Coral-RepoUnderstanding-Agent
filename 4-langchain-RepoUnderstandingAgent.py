@@ -18,7 +18,6 @@ from dotenv import load_dotenv
 from anyio import ClosedResourceError
 import urllib.parse
 import subprocess
-from langchain_groq import ChatGroq
 
 
 # Setup logging
@@ -30,7 +29,7 @@ load_dotenv()
 
 base_url = "http://localhost:5555/devmode/exampleApplication/privkey/session1/sse"
 params = {
-    "waitForAgents": 6,
+    "waitForAgents": 1,
     "agentId": "repo_understanding_agent",
     "agentDescription": """I am `repo_understanding_agent`, responsible for comprehensively analyzing a GitHub repository using only the available tools.
                            You should let me know the repo_name and branch_name."""
