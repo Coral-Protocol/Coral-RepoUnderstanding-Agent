@@ -249,21 +249,6 @@ async def main():
                         "url": MCP_SERVER_URL, 
                         "timeout": 600, 
                         "sse_read_timeout": 600
-                    },
-                    "github": {
-                        "transport": "stdio",
-                        "command": "docker",
-                        "args": [
-                            "run",
-                            "-i",
-                            "--rm",
-                            "-e",
-                            "GITHUB_PERSONAL_ACCESS_TOKEN",
-                            "ghcr.io/github/github-mcp-server"
-                        ],
-                        "env": {
-                            "GITHUB_PERSONAL_ACCESS_TOKEN": github_token
-                        }
                     }
                 }
             ) as client:
