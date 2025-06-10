@@ -238,7 +238,7 @@ async def main():
 
     github_token = os.getenv("GITHUB_ACCESS_TOKEN")
     if not github_token:
-        raise ValueError("GITHUB_PERSONAL_ACCESS_TOKEN environment variable is required")
+        raise ValueError("GITHUB_ACCESS_TOKEN environment variable is required")
 
     for attempt in range(max_retries):
         try:
