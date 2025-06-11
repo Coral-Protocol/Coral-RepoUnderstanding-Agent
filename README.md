@@ -10,30 +10,11 @@ Repo understanding agent can help you automatically analyze any GitHub repositor
 * Date added: 02/05/25
 * Licence: MIT
 
-## Clone & Install Dependencies
+## Use the Agent 
 
-1. Run [Coral Server](https://github.com/Coral-Protocol/coral-server)
-<details>
+### 1. Clone & Install Dependencies
 
-
-This agent runs on Coral Server, follow the instrcutions below to run the server. In a new terminal clone the repository:
-
-
-```bash
-git clone https://github.com/Coral-Protocol/coral-server.git
-```
-
-Navigate to the project directory:
-```bash
-cd coral-server
-```
-Run the server
-```bash
-./gradlew run
-```
-</details>
-
-2. Run [Interface Agent](https://github.com/Coral-Protocol/Coral-Interface-Agent)
+Run [Interface Agent](https://github.com/Coral-Protocol/Coral-Interface-Agent)
 <details>
 
 
@@ -69,7 +50,7 @@ uv run python 0-langchain-interface.py
 
 </details>
 
-3. Agent Installation
+Agent Installation
 
 <details>
 
@@ -107,7 +88,9 @@ cp -r utils\sse.py .venv\Lib\site-packages\mcp\client\sse.py
 
 </details>
 
-### Configure Environment Variables
+### 2. Configure Environment Variables
+
+<details>
 
 Copy the example file and update it with your credentials:
 
@@ -125,19 +108,29 @@ Required environment variables:
 
 * **GITHUB_ACCESS_TOKEN:**
   Log in to [github.com](https://github.com/), go to **Settings → Developer settings → Personal access tokens**, then “Generate new token,” select the required scopes, and copy the generated token.
+
+</details>
   
-## Run Agent
+### 3. Run Agent
+
+<details>
+
 Run the agent using `uv`:
 ```bash
 uv run 4-langchain-RepoUnderstandingAgent.py
 ```
 
-### Example Input/output
+</details>
+
+### 4. Example
+<details>
+Input:
 
 ```bash
 #Send message to the interface agent:
 Please give me a comprehensive instruction of the master branch of Coral-Protocol/coral-server.
 ```
+Output:
 
 ```bash
 Here is a comprehensive overview of the master branch of the Coral-Protocol/coral-server repository:
@@ -172,7 +165,9 @@ Here is a comprehensive overview of the master branch of the Coral-Protocol/cora
 Coral Server is a foundation for multi-agent AI systems, enabling agents to communicate, collaborate, and manage conversations through a standardized protocol and set of tools. It is highly extensible and intended as open infrastructure for the &quot;Society of AI Agents.&quot; The project is not yet production-ready but provides a robust starting point for building complex agent-based systems.
 ```
 
-### Creator details
+</details>
+
+## Creator details
 
 * Name: Xinxing
 * Affiliation: Coral Protocol
