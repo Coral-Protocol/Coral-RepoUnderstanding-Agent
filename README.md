@@ -126,8 +126,9 @@ uv run 4-langchain-RepoUnderstandingAgent.py
 <details>
 Input:
 
+Send message to the interface agent:
+
 ```bash
-#Send message to the interface agent:
 Please give me a comprehensive instruction of the master branch of Coral-Protocol/coral-server.
 ```
 Output:
