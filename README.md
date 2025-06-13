@@ -1,142 +1,135 @@
-## Responsibility 
+## [Coral RepoUnderstanding Agent](https://github.com/Coral-Protocol/Coral-RepoUnderstanding-Agent)
 
-Repo understanding agent can help you automatically analyze any GitHub repository by comprehensively reading key files (such as README.md, source code, and configuration files) and summarizing the repository’s purpose, main modules, usage instructions, and architecture. Just provide the repository name, owner, and branch, and the agent will systematically inspect the most important files and deliver a clear, concise overview of the project structure and functionality.
+The RepoUnderstanding Agent can help you automatically analyze any GitHub repository by comprehensively reading key files (such as README.md, source code, and configuration files) and summarizing the repository's purpose, main modules, usage instructions, and architecture.
+
+## Responsibility
+The RepoUnderstanding Agent systematically inspects the most important files in a repository and delivers a clear, concise overview of the project structure and functionality.
 
 ## Details
+- **Framework**: LangChain
+- **Tools used**: PyGithub List File Tool, PyGithub Read File Tool, Coral Server Tools
+- **AI model**: OpenAI GPT-4.1
+- **Date added**: 02/05/25
 
-* Framework: LangChain
-* Tools used: PyGithub List File Tool, PyGithub Read File Tool, Coral Server Tools
-* AI model: OpenAI GPT-4.1
-* Date added: 02/05/25
-* Licence: MIT
+- **License**: MIT
 
-## Use the Agent 
+## Use the Agent
 
-### 1. Clone & Install Dependencies
-
-Run [Interface Agent](https://github.com/Coral-Protocol/Coral-Interface-Agent)
+### 1. Run Coral Server
 <details>
 
-
-If you are trying to run Open Deep Research agent and require an input, you can either create your agent which communicates on the coral server or run and register the Interface Agent on the Coral Server. In a new terminal clone the repository:
-
+Ensure that the [Coral Server](https://github.com/Coral-Protocol/coral-server) is running on your system. In a new terminal, clone the repository:
 
 ```bash
-git clone https://github.com/Coral-Protocol/Coral-Interface-Agent.git
-```
-Navigate to the project directory:
-```bash
-cd Coral-Interface-Agent
-```
+# Clone the Coral Server repository
+git clone https://github.com/Coral-Protocol/coral-server.git
 
-Install `uv`:
-```bash
-pip install uv
-```
-Install dependencies from `pyproject.toml` using `uv`:
-```bash
-uv sync
-```
+# Navigate to the project directory
+cd coral-server
 
-Configure API Key
-```bash
-export OPENAI_API_KEY=
+# Run the server
+./gradlew run
 ```
-
-Run the agent using `uv`:
-```bash
-uv run python 0-langchain-interface.py
-```
-
 </details>
 
-Agent Installation
-
+### 2. Run [Interface Agent](https://github.com/Coral-Protocol/Coral-Interface-Agent)
 <details>
 
-Clone the repository:
-```bash
-git clone https://github.com/Coral-Protocol/Coral-RepoUnderstanding-Agent.git
-```
+The Interface Agent is required to interact with the RepoUnderstanding Agent. In a new terminal, clone the repository:
 
-Navigate to the project directory:
 ```bash
-cd Coral-RepoUnderstanding-Agent
-```
+# Clone the Interface Agent repository
+git clone https://github.com/Coral-Protocol/Coral-Interface-Agent.git
 
-Install `uv`:
-```bash
+# Navigate to the project directory
+cd Coral-Interface-Agent
+
+# Install `uv`:
 pip install uv
-```
 
-Install dependencies from `pyproject.toml` using `uv`:
+# Install dependencies from `pyproject.toml` using `uv`:
+uv sync
+
+# Run the agent using `uv`:
+uv run python 0-langchain-interface.py
+```
+</details>
+
+### 3. Run RepoUnderstanding Agent
+<details>
+
+In a new terminal, clone the repository:
+
 ```bash
+# Clone the RepoUnderstanding Agent repository
+git clone https://github.com/Coral-Protocol/Coral-RepoUnderstanding-Agent.git
+
+# Navigate to the project directory
+cd Coral-RepoUnderstanding-Agent
+
+# Install `uv`:
+pip install uv
+
+# Install dependencies from `pyproject.toml` using `uv`:
 uv sync
 ```
-
 This command will read the `pyproject.toml` file and install all specified dependencies in a virtual environment managed by `uv`.
 
-Copy the client sse.py from utils to mcp package
+Copy the client sse.py from utils to mcp package (Linux/Mac):
 ```bash
 cp -r utils/sse.py .venv/lib/python3.10/site-packages/mcp/client/sse.py
 ```
-
-OR Copy this for windows
+OR for Windows:
 ```bash
 cp -r utils\sse.py .venv\Lib\site-packages\mcp\client\sse.py
 ```
-
 </details>
 
-### 2. Configure Environment Variables
-
+### 4. Configure Environment Variables
 <details>
 
-Copy the example file and update it with your credentials:
+Get the API Keys:
+- [OpenAI API Key](https://platform.openai.com/api-keys)
+- [GitHub Personal Access Token](https://github.com/settings/tokens)
 
+Create a .env file in the project root:
 ```bash
-cp .env.example .env
+cp -r .env.example .env
 ```
 
+Add your API keys and any other required environment variables to the .env file.
+
 Required environment variables:
+- `OPENAI_API_KEY`
+- `GITHUB_ACCESS_TOKEN`
 
-* `OPENAI_API_KEY`
-* `GITHUB_ACCESS_TOKEN`
 
-* **OPENAI_API_KEY:**
-  Sign up at [platform.openai.com](https://platform.openai.com/), go to “API Keys” under your account, and click “Create new secret key.”
 
-* **GITHUB_ACCESS_TOKEN:**
-  Log in to [github.com](https://github.com/), go to **Settings → Developer settings → Personal access tokens**, then “Generate new token,” select the required scopes, and copy the generated token.
+
+
 
 </details>
-  
-### 3. Run Agent
 
+### 5. Run Agent
 <details>
 
 Run the agent using `uv`:
 ```bash
 uv run 4-langchain-RepoUnderstandingAgent.py
 ```
-
 </details>
 
-### 4. Example
+### 6. Example
 <details>
-Input:
-
-Send message to the interface agent:
 
 ```bash
+# Input:
 Please give me a comprehensive instruction of the master branch of Coral-Protocol/coral-server.
-```
-Output:
 
-```bash
+# Output:
 Here is a comprehensive overview of the master branch of the Coral-Protocol/coral-server repository:
 
-**Project Purpose &amp; Main Functionality:**
+**Project Purpose & Main Functionality:**
 - Coral Server implements the Coral Protocol, acting as a Model Context Protocol (MCP) server that enables communication between AI agents via a thread-based messaging system.
 - It provides tools for agents to register, create/manage threads, send messages, mention other agents, and receive notifications when mentioned.
 - The server is designed to facilitate multi-agent collaboration, with a focus on composability, scalability, and secure agent communication.
@@ -163,13 +156,11 @@ Here is a comprehensive overview of the master branch of the Coral-Protocol/cora
 - Early-stage project with ongoing development toward remote mode and expanded features.
 
 **Summary:**
-Coral Server is a foundation for multi-agent AI systems, enabling agents to communicate, collaborate, and manage conversations through a standardized protocol and set of tools. It is highly extensible and intended as open infrastructure for the &quot;Society of AI Agents.&quot; The project is not yet production-ready but provides a robust starting point for building complex agent-based systems.
+Coral Server is a foundation for multi-agent AI systems, enabling agents to communicate, collaborate, and manage conversations through a standardized protocol and set of tools. It is highly extensible and intended as open infrastructure for the "Society of AI Agents." The project is not yet production-ready but provides a robust starting point for building complex agent-based systems.
 ```
-
 </details>
 
-## Creator details
-
-* Name: Xinxing
-* Affiliation: Coral Protocol
-* Contact: [Discord](https://discord.com/invite/Xjm892dtt3)
+## Creator Details
+- **Name**: Xinxing
+- **Affiliation**: Coral Protocol
+- **Contact**: [Discord](https://discord.com/invite/Xjm892dtt3)
