@@ -241,47 +241,42 @@ async def main():
         raise ValueError("GITHUB_ACCESS_TOKEN environment variable is required")
 
     for attempt in range(max_retries):
+        client = None
         try:
-            async with MultiServerMCPClient(
-                connections = {
+            client = MultiServerMCPClient(
+                connections={
                     "coral": {
-                        "transport": "sse", 
-                        "url": MCP_SERVER_URL, 
-                        "timeout": 600, 
-                        "sse_read_timeout": 600
+                        "transport": "sse",
+                        "url": MCP_SERVER_URL,
+                        "timeout": 600,
+                        "sse_read_timeout": 600,
                     }
                 }
-            ) as client:
-                logger.info(f"Connected to MCP server at {MCP_SERVER_URL}")
-                coral_tool_names = [
-                    "list_agents",
-                    "create_thread",
-                    "add_participant",
-                    "remove_participant",
-                    "close_thread",
-                    "send_message",
-                    "wait_for_mentions",
-                ]
+            )
+            logger.info(f"Initialized MultiServerMCPClient to {MCP_SERVER_URL}")
 
-                tools = client.get_tools()
+            tools = await client.get_tools()
+            coral_tool_names = [
+                "list_agents", "create_thread", "add_participant",
+                "remove_participant", "close_thread", "send_message",
+                "wait_for_mentions",
+            ]
+            tools = [t for t in tools if t.name in coral_tool_names]
+            tools += [get_all_github_files, retrieve_github_file_content_tool]
 
-                tools = [
-                    tool for tool in tools
-                    if tool.name in coral_tool_names
-                ]
+            logger.info(f"Tools Description:\n{get_tools_description(tools)}")
 
-                tools += [get_all_github_files, retrieve_github_file_content_tool]
+            with get_openai_callback() as cb:
+                agent_executor = await create_codediff_review_agent(client, tools)
+                await agent_executor.ainvoke({})
+                logger.info("Token usage:")
+                logger.info(f"  Prompt Tokens: {cb.prompt_tokens}")
+                logger.info(f"  Completion Tokens: {cb.completion_tokens}")
+                logger.info(f"  Total Tokens: {cb.total_tokens}")
+                logger.info(f"  Total Cost (USD): ${cb.total_cost:.6f}")
 
-                logger.info(f"Tools Description:\n{get_tools_description(tools)}")
+            break
 
-                with get_openai_callback() as cb:
-                    agent_executor = await create_codediff_review_agent(client, tools)
-                    await agent_executor.ainvoke({})
-                    logger.info(f"Token usage for this run:")
-                    logger.info(f"  Prompt Tokens: {cb.prompt_tokens}")
-                    logger.info(f"  Completion Tokens: {cb.completion_tokens}")
-                    logger.info(f"  Total Tokens: {cb.total_tokens}")
-                    logger.info(f"  Total Cost (USD): ${cb.total_cost:.6f}")
         except ClosedResourceError as e:
             logger.error(f"ClosedResourceError on attempt {attempt + 1}: {e}")
             if attempt < max_retries - 1:
@@ -291,6 +286,7 @@ async def main():
             else:
                 logger.error("Max retries reached. Exiting.")
                 raise
+
         except Exception as e:
             logger.error(f"Unexpected error on attempt {attempt + 1}: {e}")
             if attempt < max_retries - 1:
