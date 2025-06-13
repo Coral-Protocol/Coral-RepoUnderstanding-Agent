@@ -13,52 +13,14 @@ The RepoUnderstanding Agent systematically inspects the most important files in 
 
 - **License**: MIT
 
-## Use the Agent
+## Use the Agent  
 
-### 1. Run Coral Server
-<details>
+### 1. Clone & Install Dependencies
 
-Ensure that the [Coral Server](https://github.com/Coral-Protocol/coral-server) is running on your system. In a new terminal, clone the repository:
 
-```bash
-# Clone the Coral Server repository
-git clone https://github.com/Coral-Protocol/coral-server.git
+<details>  
 
-# Navigate to the project directory
-cd coral-server
-
-# Run the server
-./gradlew run
-```
-</details>
-
-### 2. Run [Interface Agent](https://github.com/Coral-Protocol/Coral-Interface-Agent)
-<details>
-
-The Interface Agent is required to interact with the RepoUnderstanding Agent. In a new terminal, clone the repository:
-
-```bash
-# Clone the Interface Agent repository
-git clone https://github.com/Coral-Protocol/Coral-Interface-Agent.git
-
-# Navigate to the project directory
-cd Coral-Interface-Agent
-
-# Install `uv`:
-pip install uv
-
-# Install dependencies from `pyproject.toml` using `uv`:
-uv sync
-
-# Run the agent using `uv`:
-uv run python 0-langchain-interface.py
-```
-</details>
-
-### 3. Run RepoUnderstanding Agent
-<details>
-
-In a new terminal, clone the repository:
+Ensure that the [Coral Server](https://github.com/Coral-Protocol/coral-server) is running on your system and the [Interface Agent](https://github.com/Coral-Protocol/Coral-Interface-Agent) is running on the Coral Server.  
 
 ```bash
 # Clone the RepoUnderstanding Agent repository
@@ -75,17 +37,9 @@ uv sync
 ```
 This command will read the `pyproject.toml` file and install all specified dependencies in a virtual environment managed by `uv`.
 
-Copy the client sse.py from utils to mcp package (Linux/Mac):
-```bash
-cp -r utils/sse.py .venv/lib/python3.10/site-packages/mcp/client/sse.py
-```
-OR for Windows:
-```bash
-cp -r utils\sse.py .venv\Lib\site-packages\mcp\client\sse.py
-```
 </details>
 
-### 4. Configure Environment Variables
+### 2. Configure Environment Variables
 <details>
 
 Get the API Keys:
@@ -110,7 +64,7 @@ Required environment variables:
 
 </details>
 
-### 5. Run Agent
+### 3. Run Agent
 <details>
 
 Run the agent using `uv`:
@@ -119,7 +73,7 @@ uv run 4-langchain-RepoUnderstandingAgent.py
 ```
 </details>
 
-### 6. Example
+### 4. Example
 <details>
 
 ```bash
