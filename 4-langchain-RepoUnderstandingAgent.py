@@ -111,8 +111,7 @@ def retrieve_github_file_content_tool(repo_name: str, file_path: str, branch: st
 
     result = subprocess.run(
         [
-            "python",
-            script_path,
+            "uv", "run", script_path,
             "--repo_name", repo_name,
             "--file_path", file_path,
             "--branch", branch
