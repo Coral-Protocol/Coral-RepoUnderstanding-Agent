@@ -31,7 +31,7 @@ base_url = os.getenv("CORAL_SSE_URL")
 agentID = os.getenv("CORAL_AGENT_ID")
 
 params = {
-    "waitForAgents": 1,
+    # "waitForAgents": 1,
     "agentId": agentID,
     "agentDescription": """Repository understanding agent, responsible for comprehensively analyzing a GitHub repository using only the available tools.
                            You should let me know the repo_name and branch_name."""
