@@ -27,16 +27,17 @@ logger = logging.getLogger(__name__)
 # Load environment variables
 load_dotenv()
 
-base_url = os.getenv("CORAL_CONNECTION_URL")
+base_url = os.getenv("CORAL_SSE_URL")
+agentID = os.getenv("CORAL_AGENT_ID")
+
 params = {
     "waitForAgents": 1,
-    "agentId": "repo_understanding_agent",
-    "agentDescription": """I am `repo_understanding_agent`, responsible for comprehensively analyzing a GitHub repository using only the available tools.
+    "agentId": agentID,
+    "agentDescription": """Repository understanding agent, responsible for comprehensively analyzing a GitHub repository using only the available tools.
                            You should let me know the repo_name and branch_name."""
 }
 query_string = urllib.parse.urlencode(params)
 MCP_SERVER_URL = f"{base_url}?{query_string}"
-AGENT_NAME = "codediff_review_agent"
 
 # Validate API keys
 if not os.getenv("OPENAI_API_KEY"):
