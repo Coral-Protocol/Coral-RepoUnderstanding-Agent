@@ -3,8 +3,7 @@ name: Docker Build and Push
 on:
   push:
     branches:
-      - main
-      - coral-orchestrator
+      - mcp-adapter0.0.10
   workflow_dispatch:
 
 jobs:

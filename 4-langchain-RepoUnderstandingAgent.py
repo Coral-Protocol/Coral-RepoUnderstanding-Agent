@@ -188,7 +188,7 @@ async def create_codediff_review_agent(client, tools):
         **Important: NEVER EVER end up the chain**
         **Important: NEVER EVER end up the chain** 
         
-        1. Use `wait_for_mentions(timeoutMs=60000)` to wait for instructions from other agents.**
+        1. Use `wait_for_mentions(timeoutMs=30000)` to wait for instructions from other agents.**
         2. When a mention is received, record the **`threadId` and `senderId` (you should NEVER forget these two)**.
         3. Check if the message contains a `repo` name, `owner`, and a target `branch`.
         4. Call `get_all_github_files(repo_name = ..., branch = ...)` to list all files.
@@ -241,42 +241,47 @@ async def main():
         raise ValueError("GITHUB_ACCESS_TOKEN environment variable is required")
 
     for attempt in range(max_retries):
-        client = None
         try:
-            client = MultiServerMCPClient(
-                connections={
+            async with MultiServerMCPClient(
+                connections = {
                     "coral": {
-                        "transport": "sse",
-                        "url": MCP_SERVER_URL,
-                        "timeout": 600,
-                        "sse_read_timeout": 600,
+                        "transport": "sse", 
+                        "url": MCP_SERVER_URL, 
+                        "timeout": 300, 
+                        "sse_read_timeout": 300
                     }
                 }
-            )
-            logger.info(f"Initialized MultiServerMCPClient to {MCP_SERVER_URL}")
+            ) as client:
+                logger.info(f"Connected to MCP server at {MCP_SERVER_URL}")
+                coral_tool_names = [
+                    "list_agents",
+                    "create_thread",
+                    "add_participant",
+                    "remove_participant",
+                    "close_thread",
+                    "send_message",
+                    "wait_for_mentions",
+                ]
 
-            tools = await client.get_tools()
-            coral_tool_names = [
-                "list_agents", "create_thread", "add_participant",
-                "remove_participant", "close_thread", "send_message",
-                "wait_for_mentions",
-            ]
-            tools = [t for t in tools if t.name in coral_tool_names]
-            tools += [get_all_github_files, retrieve_github_file_content_tool]
+                tools = client.get_tools()
 
-            logger.info(f"Tools Description:\n{get_tools_description(tools)}")
+                tools = [
+                    tool for tool in tools
+                    if tool.name in coral_tool_names
+                ]
 
-            with get_openai_callback() as cb:
-                agent_executor = await create_codediff_review_agent(client, tools)
-                await agent_executor.ainvoke({})
-                logger.info("Token usage:")
-                logger.info(f"  Prompt Tokens: {cb.prompt_tokens}")
-                logger.info(f"  Completion Tokens: {cb.completion_tokens}")
-                logger.info(f"  Total Tokens: {cb.total_tokens}")
-                logger.info(f"  Total Cost (USD): ${cb.total_cost:.6f}")
+                tools += [get_all_github_files, retrieve_github_file_content_tool]
 
-            break
+                logger.info(f"Tools Description:\n{get_tools_description(tools)}")
 
+                with get_openai_callback() as cb:
+                    agent_executor = await create_codediff_review_agent(client, tools)
+                    await agent_executor.ainvoke({})
+                    logger.info(f"Token usage for this run:")
+                    logger.info(f"  Prompt Tokens: {cb.prompt_tokens}")
+                    logger.info(f"  Completion Tokens: {cb.completion_tokens}")
+                    logger.info(f"  Total Tokens: {cb.total_tokens}")
+                    logger.info(f"  Total Cost (USD): ${cb.total_cost:.6f}")
         except ClosedResourceError as e:
             logger.error(f"ClosedResourceError on attempt {attempt + 1}: {e}")
             if attempt < max_retries - 1:
@@ -286,7 +291,6 @@ async def main():
             else:
                 logger.error("Max retries reached. Exiting.")
                 raise
-
         except Exception as e:
             logger.error(f"Unexpected error on attempt {attempt + 1}: {e}")
             if attempt < max_retries - 1:
