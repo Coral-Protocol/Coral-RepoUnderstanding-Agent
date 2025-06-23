@@ -13,6 +13,34 @@ The RepoUnderstanding Agent systematically inspects the most important files in 
 
 - **License**: MIT
 
+## Use the Agent in Orchestration
+You will need to have API keys from [OpenAI](https://platform.openai.com/api-keys).
+
+### Executable Agent Definition 
+```yaml
+  coral-repo:
+    options:
+      - name: "OPENAI_API_KEY"
+        type: "string"
+        description: "OpenAI API Key for RepoUnderstanding Agent"
+      - name: "GITHUB_PERSONAL_ACCESS_TOKEN"
+        type: "string"
+        description: "GitHub Personal Access Token"
+    runtime:
+      type: "executable"
+      command:
+        [
+          "bash",
+          "-c",
+          "cd ../Coral-RepoUnderstanding-Agent && uv sync && uv run 4-langchain-RepoUnderstandingAgent.py",
+        ]
+      environment:
+        - name: "OPENAI_API_KEY"
+          from: "OPENAI_API_KEY"
+        - name: "GITHUB_PERSONAL_ACCESS_TOKEN"
+          from: "GITHUB_PERSONAL_ACCESS_TOKEN"
+```
+
 ## Use the Agent  
 
 ### 1. Clone & Install Dependencies
