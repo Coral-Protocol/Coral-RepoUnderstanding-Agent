@@ -6,6 +6,7 @@ from typing import List
 from github import Github
 from github.ContentFile import ContentFile
 from github.GithubException import GithubException
+from langchain_core.messages import HumanMessage, AIMessage
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langchain.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
@@ -278,7 +279,7 @@ async def main():
             break
 
         except ClosedResourceError as e:
-            logger.error(f"ClosedResourceError on attempt {attempt + 1}: {e}")
+            logger.error(f"ClosedResourceError on attempt {attempt + 1}: {repr(e)}")
             if attempt < max_retries - 1:
                 logger.info(f"Retrying in {retry_delay} seconds...")
                 await asyncio.sleep(retry_delay)
@@ -288,7 +289,7 @@ async def main():
                 raise
 
         except Exception as e:
-            logger.error(f"Unexpected error on attempt {attempt + 1}: {e}")
+            logger.error(f"Unexpected error on attempt {attempt + 1}: {repr(e)}")
             if attempt < max_retries - 1:
                 logger.info(f"Retrying in {retry_delay} seconds...")
                 await asyncio.sleep(retry_delay)
