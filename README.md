@@ -40,6 +40,26 @@ You will need to have API keys from [OpenAI](https://platform.openai.com/api-key
         - name: "GITHUB_PERSONAL_ACCESS_TOKEN"
           from: "GITHUB_PERSONAL_ACCESS_TOKEN"
 ```
+### Docker Agent Definition 
+
+```yaml
+  repounderstanding:
+    options:
+      - name: "OPENAI_API_KEY"
+        type: "string"
+        description: "OpenAI API Key"
+      - name: "GITHUB_ACCESS_TOKEN"
+        type: "string"
+        description: "GitHub Access Token"
+    runtime:
+      type: "docker"
+      image: "sd2879/coral-repounderstanding:latest"
+      environment:
+        - name: "OPENAI_API_KEY"
+          from: "OPENAI_API_KEY"
+        - name: "GITHUB_ACCESS_TOKEN"
+          from: "GITHUB_ACCESS_TOKEN"
+```
 
 ## Use the Agent  
 
