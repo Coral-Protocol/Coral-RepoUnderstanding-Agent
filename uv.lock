@@ -313,6 +313,7 @@ dependencies = [
     { name = "langchain-community" },
     { name = "langchain-mcp-adapters" },
     { name = "langchain-openai" },
+    { name = "mcp" },
     { name = "pygithub" },
 ]
 
@@ -322,6 +323,7 @@ requires-dist = [
     { name = "langchain-community", specifier = ">=0.3.24" },
     { name = "langchain-mcp-adapters", specifier = "==0.1.7" },
     { name = "langchain-openai", specifier = ">=0.3.20" },
+    { name = "mcp", git = "https://github.com/modelcontextprotocol/python-sdk.git?rev=4d45bb85a8b73e3ca26b7976d136f653d5afca42" },
     { name = "pygithub", specifier = ">=2.6.1" },
 ]
 
@@ -842,8 +844,8 @@ wheels = [
 
 [[package]]
 name = "mcp"
-version = "1.9.3"
-source = { registry = "https://pypi.org/simple" }
+version = "1.9.5.dev20+4d45bb8"
+source = { git = "https://github.com/modelcontextprotocol/python-sdk.git?rev=4d45bb85a8b73e3ca26b7976d136f653d5afca42#4d45bb85a8b73e3ca26b7976d136f653d5afca42" }
 dependencies = [
     { name = "anyio" },
     { name = "httpx" },
@@ -854,10 +856,6 @@ dependencies = [
     { name = "sse-starlette" },
     { name = "starlette" },
     { name = "uvicorn", marker = "sys_platform != 'emscripten'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/f2/df/8fefc0c6c7a5c66914763e3ff3893f9a03435628f6625d5e3b0dc45d73db/mcp-1.9.3.tar.gz", hash = "sha256:587ba38448e81885e5d1b84055cfcc0ca56d35cd0c58f50941cab01109405388", size = 333045 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/79/45/823ad05504bea55cb0feb7470387f151252127ad5c72f8882e8fe6cf5c0e/mcp-1.9.3-py3-none-any.whl", hash = "sha256:69b0136d1ac9927402ed4cf221d4b8ff875e7132b0b06edd446448766f34f9b9", size = 131063 },
 ]
 
 [[package]]
