@@ -53,7 +53,7 @@ You will need to have API keys from [OpenAI](https://platform.openai.com/api-key
         description: "GitHub Access Token"
     runtime:
       type: "docker"
-      image: "sd2879/coral-repounderstanding:latest"
+      image: "coralprotocol/coral-repounderstanding:latest"
       environment:
         - name: "OPENAI_API_KEY"
           from: "OPENAI_API_KEY"
