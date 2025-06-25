@@ -23,7 +23,7 @@ You will need to have API keys from [OpenAI](https://platform.openai.com/api-key
       - name: "OPENAI_API_KEY"
         type: "string"
         description: "OpenAI API Key for RepoUnderstanding Agent"
-      - name: "GITHUB_PERSONAL_ACCESS_TOKEN"
+      - name: "GITHUB_ACCESS_TOKEN"
         type: "string"
         description: "GitHub Personal Access Token"
     runtime:
@@ -37,8 +37,8 @@ You will need to have API keys from [OpenAI](https://platform.openai.com/api-key
       environment:
         - name: "OPENAI_API_KEY"
           from: "OPENAI_API_KEY"
-        - name: "GITHUB_PERSONAL_ACCESS_TOKEN"
-          from: "GITHUB_PERSONAL_ACCESS_TOKEN"
+        - name: "GITHUB_ACCESS_TOKEN"
+          from: "GITHUB_ACCESS_TOKEN"
 ```
 ### Docker Agent Definition 
 
