@@ -14,7 +14,9 @@ The RepoUnderstanding Agent systematically inspects the most important files in 
 - **License**: MIT
 
 ## Use the Agent in Orchestration
-You will need to have API keys from [OpenAI](https://platform.openai.com/api-keys).
+Get the API Keys:
+- [OpenAI API Key](https://platform.openai.com/api-keys)
+- [GitHub Personal Access Token](https://github.com/settings/tokens)
 
 ### Executable Agent Definition 
 ```yaml
@@ -25,7 +27,7 @@ You will need to have API keys from [OpenAI](https://platform.openai.com/api-key
         description: "OpenAI API Key for RepoUnderstanding Agent"
       - name: "GITHUB_ACCESS_TOKEN"
         type: "string"
-        description: "GitHub Personal Access Token"
+        description: "GitHub Access Token"
     runtime:
       type: "executable"
       command:
