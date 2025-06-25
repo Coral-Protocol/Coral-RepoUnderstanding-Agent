@@ -70,6 +70,8 @@ You will need to have API keys from [OpenAI](https://platform.openai.com/api-key
 
 Ensure that the [Coral Server](https://github.com/Coral-Protocol/coral-server) is running on your system and the [Interface Agent](https://github.com/Coral-Protocol/Coral-Interface-Agent) is running on the Coral Server.  
 
+<details>
+<summary>Click to expand setup instructions in normal way</summary>
 ```bash
 # Clone the RepoUnderstanding Agent repository
 git clone https://github.com/Coral-Protocol/Coral-RepoUnderstanding-Agent.git
@@ -84,6 +86,22 @@ pip install uv
 uv sync
 ```
 This command will read the `pyproject.toml` file and install all specified dependencies in a virtual environment managed by `uv`.
+</details>
+
+</details>
+
+<details>
+<summary>Click to expand setup instructions with docker</summary>
+```bash
+# Clone the RepoUnderstanding Agent repository
+git clone https://github.com/Coral-Protocol/Coral-RepoUnderstanding-Agent.git
+
+# Navigate to the project directory
+cd Coral-RepoUnderstanding-Agent
+
+docker pull coralprotocol/coral-repounderstanding
+```
+</details>
 
 </details>
 
