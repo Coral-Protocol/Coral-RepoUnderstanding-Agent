@@ -5,14 +5,12 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "langchain>=0.3.25",
-    "langchain-community>=0.3.24",
+    "langchain==0.3.25",
+    "langchain-community==0.3.24",
+    "langchain-experimental==0.3.4",
+    "langchain-groq==0.3.4",
     "langchain-mcp-adapters==0.1.7",
-    "langchain-openai>=0.3.20",
-    "mcp", # When 1.9.5 is released, it will likely include the read timeout fix
+    "langchain-openai==0.3.26",
     "pygithub>=2.6.1",
+    "uv>=0.7.17",
 ]
-
-[tool.uv.sources]
-# This version of the MCP SDK is required to fix a read timeout issue in the MCP client.
-mcp = { git = "https://github.com/modelcontextprotocol/python-sdk.git", rev = "4d45bb85a8b73e3ca26b7976d136f653d5afca42" }

@@ -1,8 +1,9 @@
-## [Coral RepoUnderstanding Agent](https://github.com/Coral-Protocol/Coral-RepoUnderstanding-Agent)
-
+## [Coral Repo Understanding Agent](https://github.com/Coral-Protocol/Coral-Pandas-Agent)
+ 
 The RepoUnderstanding Agent can help you automatically analyze any GitHub repository by comprehensively reading key files (such as README.md, source code, and configuration files) and summarizing the repository's purpose, main modules, usage instructions, and architecture.
 
 ## Responsibility
+
 The RepoUnderstanding Agent systematically inspects the most important files in a repository and delivers a clear, concise overview of the project structure and functionality.
 
 ## Details
@@ -10,157 +11,133 @@ The RepoUnderstanding Agent systematically inspects the most important files in 
 - **Tools used**: PyGithub List File Tool, PyGithub Read File Tool, Coral Server Tools
 - **AI model**: OpenAI GPT-4.1
 - **Date added**: 02/05/25
-
 - **License**: MIT
 
-## Use the Agent in Orchestration
-Get the API Keys:
-- [OpenAI API Key](https://platform.openai.com/api-keys)
-- [GitHub Personal Access Token](https://github.com/settings/tokens)
-
-### Executable Agent Definition 
-```yaml
-  coral-repo:
-    options:
-      - name: "OPENAI_API_KEY"
-        type: "string"
-        description: "OpenAI API Key for RepoUnderstanding Agent"
-      - name: "GITHUB_ACCESS_TOKEN"
-        type: "string"
-        description: "GitHub Access Token"
-    runtime:
-      type: "executable"
-      command:
-        [
-          "bash",
-          "-c",
-          "cd ../Coral-RepoUnderstanding-Agent && uv sync && uv run 4-langchain-RepoUnderstandingAgent.py",
-        ]
-      environment:
-        - name: "OPENAI_API_KEY"
-          from: "OPENAI_API_KEY"
-        - name: "GITHUB_ACCESS_TOKEN"
-          from: "GITHUB_ACCESS_TOKEN"
-```
-### Docker Agent Definition 
-
-```yaml
-  repounderstanding:
-    options:
-      - name: "OPENAI_API_KEY"
-        type: "string"
-        description: "OpenAI API Key"
-      - name: "GITHUB_ACCESS_TOKEN"
-        type: "string"
-        description: "GitHub Access Token"
-    runtime:
-      type: "docker"
-      image: "coralprotocol/coral-repounderstanding:latest"
-      environment:
-        - name: "OPENAI_API_KEY"
-          from: "OPENAI_API_KEY"
-        - name: "GITHUB_ACCESS_TOKEN"
-          from: "GITHUB_ACCESS_TOKEN"
-```
-
-## Use the Agent in Dev
+## Setup the Agent
 
 ### 1. Clone & Install Dependencies
 
-
 <details>  
 
-Ensure that the [Coral Server](https://github.com/Coral-Protocol/coral-server) is running on your system and the [Interface Agent](https://github.com/Coral-Protocol/Coral-Interface-Agent) is running on the Coral Server.  
-
-<details>
-  
-<summary>Click to expand setup instructions in normal way</summary>
-
 ```bash
-# Clone the RepoUnderstanding Agent repository
+# In a new terminal clone the repository:
 git clone https://github.com/Coral-Protocol/Coral-RepoUnderstanding-Agent.git
 
-# Navigate to the project directory
+# Navigate to the project directory:
 cd Coral-RepoUnderstanding-Agent
 
-# Install `uv`:
+# Download and run the UV installer, setting the installation directory to the current one
+curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR=$(pwd) sh
+
+# Create a virtual environment named `.venv` using UV
+uv venv .venv
+
+# Activate the virtual environment
+source .venv/bin/activate
+
+# install uv
 pip install uv
 
 # Install dependencies from `pyproject.toml` using `uv`:
 uv sync
 ```
-This command will read the `pyproject.toml` file and install all specified dependencies in a virtual environment managed by `uv`.
-
-</details>
-
-
-<details>
-  
-<summary>Click to expand setup instructions with docker</summary>
-
-```bash
-# Clone the RepoUnderstanding Agent repository
-git clone https://github.com/Coral-Protocol/Coral-RepoUnderstanding-Agent.git
-
-# Navigate to the project directory
-cd Coral-RepoUnderstanding-Agent
-
-docker pull coralprotocol/coral-repounderstanding
-```
-</details>
 
 </details>
 
 ### 2. Configure Environment Variables
-<details>
 
 Get the API Keys:
 - [OpenAI API Key](https://platform.openai.com/api-keys)
 - [GitHub Personal Access Token](https://github.com/settings/tokens)
 
-Create a .env file in the project root:
+<details>
+
 ```bash
+# Create .env file in project root
 cp -r .env.example .env
 ```
+</details>
 
-Add your API keys and any other required environment variables to the .env file.
+## Run the Agent
 
-Required environment variables:
-- `OPENAI_API_KEY`
-- `GITHUB_ACCESS_TOKEN`
+You can run in either of the below modes to get your system running.  
 
+- The Executable Model is part of the Coral Protocol Orchestrator which works with [Coral Studio UI](https://github.com/Coral-Protocol/coral-studio).  
+- The Dev Mode allows the Coral Server and all agents to be seaprately running on each terminal without UI support.  
 
+### 1. Executable Mode
 
+Checkout: [How to Build a Multi-Agent System with Awesome Open Source Agents using Coral Protocol](https://github.com/Coral-Protocol/existing-agent-sessions-tutorial-private-temp) and update the file: `coral-server/src/main/resources/application.yaml` with the details below, then run the [Coral Server](https://github.com/Coral-Protocol/coral-server) and [Coral Studio UI](https://github.com/Coral-Protocol/coral-studio). You do not need to set up the `.env` in the project directory for running in this mode; it will be captured through the variables below.
 
+<details>
 
+For Linux or MAC:
+
+```bash
+# PROJECT_DIR="/PATH/TO/YOUR/PROJECT"
+
+applications:
+  - id: "app"
+    name: "Default Application"
+    description: "Default application for testing"
+    privacyKeys:
+      - "default-key"
+      - "public"
+      - "priv"
+
+registry:
+  pandas:
+    options:
+      - name: "API_KEY"
+        type: "string"
+        description: "API key for the service"
+      - name: "GITHUB_ACCESS_TOKEN"
+        type: "string"
+        description: "key for the github service"
+    runtime:
+      type: "executable"
+      command: ["bash", "-c", "${PROJECT_DIR}/run_agent.sh main.py"]
+      environment:
+        - name: "API_KEY"
+          from: "API_KEY"
+        - name: "GITHUB_ACCESS_TOKEN"
+          from: "GITHUB_ACCESS_TOKEN"
+        - name: "MODEL_NAME"
+          value: "gpt-4.1"
+        - name: "MODEL_PROVIDER"
+          value: "openai"
+        - name: "MODEL_TOKEN"
+          value: "16000"
+        - name: "MODEL_TEMPERATURE"
+          value: "0.3"
+
+```
+
+For Windows, create a powershell command (run_agent.ps1) and run:
+
+```bash
+command: ["powershell","-ExecutionPolicy", "Bypass", "-File", "${PROJECT_DIR}/run_agent.ps1","main.py"]
+```
 
 </details>
 
-### 3. Run Agent
+### 2. Dev Mode
+
+Ensure that the [Coral Server](https://github.com/Coral-Protocol/coral-server) is running on your system and run below command in a separate terminal.
+
 <details>
-  
-<details>
-  
-<summary>Run the agent using uv</summary>
 
 ```bash
-uv run 4-langchain-RepoUnderstandingAgent.py
+# Run the agent using `uv`:
+uv run python main.py
 ```
 </details>
 
+
+## Example
+
 <details>
 
-<summary>Run the agent using docker</summary>
-
-```bash
-docker run --network host --env-file .env -it coralprotocol/coral-repounderstanding
-```
-</details>
-
-</details>
-
-### 4. Example
-<details>
 
 ```bash
 # Input:
@@ -200,7 +177,8 @@ Coral Server is a foundation for multi-agent AI systems, enabling agents to comm
 ```
 </details>
 
+
 ## Creator Details
-- **Name**: Xinxing
+- **Name**: Suman Deb
 - **Affiliation**: Coral Protocol
 - **Contact**: [Discord](https://discord.com/invite/Xjm892dtt3)
