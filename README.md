@@ -86,7 +86,7 @@ applications:
       - "priv"
 
 registry:
-  pandas:
+  repo:
     options:
       - name: "API_KEY"
         type: "string"
