@@ -37,10 +37,6 @@ params = {
 query_string = urllib.parse.urlencode(params)
 MCP_SERVER_URL = f"{base_url}?{query_string}"
 
-# Validate API keys
-if not os.getenv("OPENAI_API_KEY"):
-    raise ValueError("OPENAI_API_KEY is not set in environment variables.")
-
 def get_tools_description(tools):
     return "\n".join(f"Tool: {t.name}, Schema: {json.dumps(t.args).replace('{', '{{').replace('}', '}}')}" for t in tools)
     
