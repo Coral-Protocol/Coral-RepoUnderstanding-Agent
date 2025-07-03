@@ -1,4 +1,4 @@
-## [Coral Repo Understanding Agent](https://github.com/Coral-Protocol/Coral-Pandas-Agent)
+## [Repo Understanding Agent](https://github.com/Coral-Protocol/Coral-Pandas-Agent)
  
 The RepoUnderstanding Agent can help you automatically analyze any GitHub repository by comprehensively reading key files (such as README.md, source code, and configuration files) and summarizing the repository's purpose, main modules, usage instructions, and architecture.
 
