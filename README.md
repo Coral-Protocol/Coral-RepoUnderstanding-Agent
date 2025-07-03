@@ -179,6 +179,6 @@ Coral Server is a foundation for multi-agent AI systems, enabling agents to comm
 
 
 ## Creator Details
-- **Name**: Suman Deb
+- **Name**: Xinxing
 - **Affiliation**: Coral Protocol
 - **Contact**: [Discord](https://discord.com/invite/Xjm892dtt3)
