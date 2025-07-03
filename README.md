@@ -86,7 +86,7 @@ applications:
       - "priv"
 
 registry:
-  repo:
+  repo_understanding_agent:
     options:
       - name: "API_KEY"
         type: "string"
