@@ -22,20 +22,6 @@ import traceback
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-# Load environment variables
-load_dotenv()
-
-base_url = os.getenv("CORAL_SSE_URL")
-agentID = os.getenv("CORAL_AGENT_ID")
-
-params = {
-    # "waitForAgents": 1,
-    "agentId": agentID,
-    "agentDescription": """Repository understanding agent, responsible for comprehensively analyzing a GitHub repository using only the available tools.
-                           You should let me know the repo_name and branch_name."""
-}
-query_string = urllib.parse.urlencode(params)
-MCP_SERVER_URL = f"{base_url}?{query_string}"
 
 def get_tools_description(tools):
     return "\n".join(f"Tool: {t.name}, Schema: {json.dumps(t.args).replace('{', '{{').replace('}', '}}')}" for t in tools)
@@ -164,7 +150,24 @@ async def create_repo_agent(client, tools):
     return AgentExecutor(agent=agent, tools=tools, max_iterations=None ,verbose=True)
 
 async def main():
-    CORAL_SERVER_URL = f"{base_url}?{query_string}"
+    runtime = os.getenv("CORAL_ORCHESTRATION_RUNTIME", "devmode")
+
+    if runtime == "docker" or runtime == "executable":
+        base_url = os.getenv("CORAL_SSE_URL")
+        agentID = os.getenv("CORAL_AGENT_ID")
+    else:
+        load_dotenv()
+        base_url = os.getenv("CORAL_SSE_URL")
+        agentID = os.getenv("CORAL_AGENT_ID")
+
+    coral_params = {
+        "agentId": agentID,
+        "agentDescription": "An agent that takes the user's input and interacts with other agents to fulfill the request"
+    }
+
+    query_string = urllib.parse.urlencode(coral_params)
+
+    CORAL_SERVER_URL = f"{base_url}?{query_string}"    
     logger.info(f"Connecting to Coral Server: {CORAL_SERVER_URL}")
 
     client = MultiServerMCPClient(
